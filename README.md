@@ -4,38 +4,39 @@ Trata-se, portanto, de uma calculadora que utiliza Webservice e Socket, onde é 
 e operações avançadas de potenciação, raiz quadrada e porcentagem.
 
 ## Estrutura dos arquivos
-├───src
-│   ├───main
-│   │   ├───java
-│   │   │   │   AdvancedCalculator.java
-│   │   │   │   AdvancedServer.java
-│   │   │   │   AdvancedServerConnection.java
-│   │   │   │   Api.java
-│   │   │   │   BasicCalculator.java
-│   │   │   │   BasicServer.java
-│   │   │   │   BasicServerConnection.java
-│   │   │   │   Calculate.java
-│   │   │   │   Utils.java
-│   │   │   │
-│   │   │   └───org
-│   │   │       └───json
-│   │   │
-│   │   └───resources
-│   │       ├───public
-│   │       │   ├───css
-│   │       │   │       styles.css
-│   │       │   │
-│   │       │   └───js
-│   │       │       │   app.js
-│   │       │       │
-│   │       │       └───vendor
-│   │       │               intercooler-0.9.6.min.js
-│   │       │               jquery-1.12.4.min.js
-│   │       │
-│   │       └───velocity
-│   │               editTodo.vm
-│   │               index.vm
-│   │               todoList.vm
+  .
+  ├───src
+  │   ├───main
+  │   │   ├───java
+  │   │   │   │   AdvancedCalculator.java
+  │   │   │   │   AdvancedServer.java
+  │   │   │   │   AdvancedServerConnection.java
+  │   │   │   │   Api.java
+  │   │   │   │   BasicCalculator.java
+  │   │   │   │   BasicServer.java
+  │   │   │   │   BasicServerConnection.java
+  │   │   │   │   Calculate.java
+  │   │   │   │   Utils.java
+  │   │   │   │
+  │   │   │   └───org
+  │   │   │       └───json
+  │   │   │
+  │   │   └───resources
+  │   │       ├───public
+  │   │       │   ├───css
+  │   │       │   │       styles.css
+  │   │       │   │
+  │   │       │   └───js
+  │   │       │       │   app.js
+  │   │       │       │
+  │   │       │       └───vendor
+  │   │       │               intercooler-0.9.6.min.js
+  │   │       │               jquery-1.12.4.min.js
+  │   │       │
+  │   │       └───velocity
+  │   │               editTodo.vm
+  │   │               index.vm
+  │   │               todoList.vm
 
 
 ##  Instruções de Uso
