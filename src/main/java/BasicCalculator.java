@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class CalculatorBasic {
+public class BasicCalculator {
     private double op1;//operand 1
     private double op2; //operand 2
     private String opr; //operator
@@ -8,18 +8,18 @@ public class CalculatorBasic {
     /*CalculatorBasic(){
     }*/
 
-    CalculatorBasic(double op, String opr){
+    BasicCalculator(double op, String opr){
         this.op1 = 0.0;
         this.op2 = op;
         this.opr = opr;
     }
-    CalculatorBasic(double op1, double op2, String opr){
+    BasicCalculator(double op1, double op2, String opr){
         this.op1 = op1;
         this.op2 = op2;
         this.opr = opr;
     }
 
-    public CalculatorBasic() {
+    public BasicCalculator() {
         this.op1 = 0.0;
         this.op2 = 0.0;
     }

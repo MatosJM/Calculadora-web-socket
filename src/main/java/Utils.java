@@ -1,6 +1,7 @@
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.Scanner;
 
 public class Utils {
     public static String getFuncPattern(){
@@ -13,14 +14,20 @@ public class Utils {
     public static String getPercPattern(){
         String num = "[+-]?[0-9]+([.][0-9]+)?(E[+-]?[0-9]+)?";
         String op = "[+\\-*/]";
-        return num + op + num + "%";
+        return op + num + "%";
+    }
+
+    public static String getPowerPattern(){
+        String num = "[+-]?[0-9]+([.][0-9]+)?(E[+-]?[0-9]+)?";
+        String op = "\\^";
+        return num + op + num ;
     }
     public static boolean isOperator(String opr){
         String op = "[+\\-*/]";
 
         return opr.matches(op);
     }
-    public static boolean isAdvOperator(String opr){
+    public static boolean isPowerOperator(String opr){
         String op = "\\^";
 
         return opr.matches(op);
@@ -30,6 +37,26 @@ public class Utils {
 
         return num.matches(numRegex);
     }
+    public static boolean isSignedNum(String num){
+        String numRegex = "[+-]?[0-9]+([.][0-9]+)?(E[+-]?[0-9]+)?";
+        String op = "[+\\-*/]";
+        String sNumRegex = "\\(" + numRegex + "\\)" + "|" + "(" + op + numRegex + ")"; //(num) | op num
+        return num.matches(sNumRegex);
+    }
+    public static boolean isSimpleExpr(String expr){
+        boolean ret;
+        String num = "[+-]?[0-9]+([.][0-9]+)?(E[+-]?[0-9]+)?";
+        String op = "[+\\-*/]";
+        String exprS = "\\(" + num + "("+ op + num + ")+" + "\\)";
+        try {
+            ret = expr.matches(exprS);
+        }catch (Exception e){
+            ret = false;
+        }
+        return ret;
+
+    }
+
     public static boolean isPunct(char c){
         boolean b = c == '.' || c == ',';
         return b;
@@ -90,6 +117,131 @@ public class Utils {
                 return 4;
         }
         return -1;
+    }
+
+    public static ArrayList<String> toArrayList(String expr)
+    {
+        ArrayList<String> exprPosF = new ArrayList<>();
+        Deque<Character> stackAux= new ArrayDeque<>();
+        StringBuilder sbStr = new StringBuilder();
+        char cAux;
+
+        for (int i = 0; i < expr.length(); i++) {
+            char c = expr.charAt(i);
+            //sbStr.append(c);
+            stackAux.add(c);
+            sbStr.append(c);
+            //a pilha auxiliar possui um operador no topo
+            //if(isOperator(stackAux.peekLast().toString()) || stackAux.peekLast()==')'){
+            if(isOperator(String.valueOf(c)) || c==')'){
+                //opererador retirado do topo da pilha
+                //cAux = stackAux.removeLast();
+                if(c!=')')
+                    sbStr.deleteCharAt(sbStr.length()-1);
+
+//#################################################################################
+                if(isSignedNum(sbStr.toString())){
+                    exprPosF.add( sbStr.toString().replaceAll("[()]",""));
+                    sbStr = new StringBuilder();
+
+                }else if(isSimpleExpr(sbStr.toString())){
+                    exprPosF.add(sbStr.toString());
+                    sbStr = new StringBuilder();
+                }else if(isNum(sbStr.toString())){
+                    exprPosF.add(sbStr.toString());
+                    sbStr = new StringBuilder();
+                }else if(isOperator(sbStr.toString())){
+                    exprPosF.add(sbStr.toString());
+                    sbStr = new StringBuilder();
+                }
+                //adiciona à expressão pósfixa quando for um operador
+                if(sbStr.toString().isEmpty() && isOperator(String.valueOf(c))) exprPosF.add(String.valueOf(c));
+                else if(!sbStr.toString().isEmpty() && sbStr.length()>1) {
+                    if(sbStr.charAt(0)=='('){
+                    //adiciona '(' a expressão pósfixa
+                    exprPosF.add(String.valueOf(sbStr.charAt(0)));
+                    sbStr.deleteCharAt(0);
+                    //adiciona o número a expressão pósfixa
+                    exprPosF.add(sbStr.toString());
+                    exprPosF.add(String.valueOf(c)); //aqui pode dar erro
+                        sbStr = new StringBuilder();
+                    }else if(sbStr.charAt(sbStr.length()-1)==')'){
+                        //adiciona o número a expressão pósfixa
+                        sbStr.deleteCharAt(sbStr.length()-1);
+                        exprPosF.add(sbStr.toString());
+
+                        //adiciona ')' a expressão pósfixa
+                        exprPosF.add(String.valueOf(c));
+                        sbStr = new StringBuilder();
+
+                    }
+                }else if(!sbStr.toString().isEmpty()) sbStr.append(c);
+            }else if(sbStr.toString().equals("((")){
+                //adiciona '(' a expressão pósfixa
+                exprPosF.add(String.valueOf(sbStr.charAt(0)));
+                sbStr.deleteCharAt(0);
+            }
+
+        }
+
+        //#################################################################################
+        if(!sbStr.toString().isEmpty()){
+            exprPosF.add(sbStr.toString());
+        }
+        //#################################################################################
+
+
+        return exprPosF;
+    }
+
+    public static ArrayList<String> infixToPostfix(ArrayList<String> expr){
+        ArrayList<String> exprPosF = new ArrayList<>();
+        Deque<String> stackAux= new ArrayDeque<>();
+
+        for(String op : expr){
+  //          System.out.println(op);
+
+            if (isNum(op))
+                exprPosF.add(op);
+//            else if(isNum(op))
+//                stackAux.push(op);
+            else if(op.equals("("))
+                stackAux.push(op);
+            else if(op.equals(")")){
+                while (!stackAux.isEmpty() && !stackAux.peek().equals("(")) {
+//                    result += stackAux.peek();
+                    exprPosF.add(stackAux.peek());
+                    stackAux.pop();
+                }
+                //remove '(' da pilha
+                if(!stackAux.isEmpty())stackAux.pop();
+            }else{// an operator is searched
+                while (!stackAux.isEmpty()
+                        && precedence(op.charAt(0)) <= precedence(stackAux.peek().charAt(0))) {
+                    // result += stackAux.peek();
+                    exprPosF.add(stackAux.peek());
+                    stackAux.pop();
+                }
+                stackAux.push(op);
+            }
+
+        }
+        // pop all the operators from the stack
+        while (!stackAux.isEmpty()) {
+
+            if (stackAux.peek().equals("(")){
+                String str = "Invalid Expression";
+                ArrayList <String> ret = new ArrayList<>();
+                ret.add(str);
+                exprPosF = ret;
+                return exprPosF;
+            }
+
+            exprPosF.add(stackAux.peek());
+            stackAux.pop();
+        }
+
+        return exprPosF;
     }
 
     public static ArrayList<String> infixToPostfix(String exp)
