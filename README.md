@@ -15,7 +15,6 @@ e operações avançadas de potenciação, raiz quadrada e porcentagem.
 │   │   │   │   BasicServer.java
 │   │   │   │   BasicServerConnection.java
 │   │   │   │   Calculate.java
-│   │   │   │   README.md
 │   │   │   │   Utils.java
 │   │   │   │
 │   │   │   └───org
