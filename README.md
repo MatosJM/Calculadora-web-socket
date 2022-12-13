@@ -4,6 +4,7 @@ Trata-se, portanto, de uma calculadora que utiliza Webservice e Socket, onde é 
 e operações avançadas de potenciação, raiz quadrada e porcentagem.
 
 ## Estrutura dos arquivos
+  ~~~
   .
   ├───src
   │   ├───main
@@ -38,6 +39,7 @@ e operações avançadas de potenciação, raiz quadrada e porcentagem.
   │   │               index.vm
   │   │               todoList.vm
 
+~~~
 
 ##  Instruções de Uso
 1. Baixar o projeto
